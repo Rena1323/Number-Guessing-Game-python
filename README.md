@@ -1,2 +1,2 @@
 # Number-Guessing-Game-python
-A simple number guessing game written in python.
+This is a study project designed to test your personal skills and knowledge in programming in Python and using git.
