@@ -66,7 +66,7 @@ def display_game_time(start_time: float) -> None:
     print(f"Game time: {elapsed_time:.2f} sec.")
 
 
-def play_round(max_attempts: int):
+def play_round(max_attempts: int) -> None:
     start_time = time.perf_counter()
     secret_number = generate_secret_number()
 
@@ -84,6 +84,7 @@ def play_round(max_attempts: int):
                 f"\nCongratulations! You guessed the correct number in {attempts_used} attempts."
             )
             display_game_time(start_time)
+            return
     print(f"\nGame over! The number was {secret_number}.")
     display_game_time(start_time)
 
@@ -93,7 +94,7 @@ def main():
         dedent(f"""
             Welcome to the Number Guessing Game!
             I'm thinking of a number from {MIN_NUMBER} to {MAX_NUMBER}.
-            You have some chances to guess correctly.
+            You have a limited number of chances
             """)
     )
 
