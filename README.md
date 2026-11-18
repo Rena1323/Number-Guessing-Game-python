@@ -1,6 +1,7 @@
 # Number-Guessing-Game-python
 
 Hello everyone! This is a study project designed to test your personal skills and knowledge in programming in Python and using git.
+
 Project: https://roadmap.sh/projects/number-guessing-game
 
 **How to start:**
@@ -19,11 +20,9 @@ uv run number-guessing-game-python
 Example output:
 
 ```
-+------------------------------------------+
-| Welcome to the Number Guessing Game!     |
-| I'm thinking of a number from 1 to 100.  |
-| You have some chances to guess correctly.|
-+------------------------------------------+
+Welcome to the Number Guessing Game!
+I'm thinking of a number from 1 to 100.
+You have some chances to guess correctly.
 
 
 Please select the difficulty level:
