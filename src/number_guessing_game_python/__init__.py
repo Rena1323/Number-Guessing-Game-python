@@ -1,10 +1,14 @@
+import time
 from random import randint
 from textwrap import dedent
+
+MIN_NUMBER = 1
+MAX_NUMBER = 100
 
 
 def choose_difficulty() -> int:
     while True:
-        difficulty_choice = input("Enter your Choice: ")
+        difficulty_choice = input("Enter your Choice: ").strip()
         if difficulty_choice == "1":
             max_attempts = 10
             selected_level = "easy"
@@ -27,46 +31,69 @@ def choose_difficulty() -> int:
 
 
 def generate_secret_number() -> int:
-    return randint(1, 100)
+    return randint(MIN_NUMBER, MAX_NUMBER)
 
 
 def ask_to_play_again() -> bool:
-    replay_answer = input(
-        "\nDo you want to play again? ('yes' or 'no' and press Enter): "
-    )
     while True:
-        if replay_answer == "yes":
+        answer = input("\nDo you want to play again? (yes/no): ").strip().lower()
+
+        if answer == "yes":
             return True
-        elif replay_answer == "no":
+        elif answer == "no":
             return False
-        else:
-            replay_answer = input("Please, type 'yes' or 'no': ")
-            continue
+
+        print("Please, type 'yes' or 'no'.")
 
 
 def get_valid_guess() -> int:
     while True:
-        raw_guess = input("\nEnter your guess (1-100): ")
+        raw_guess = input(f"\nEnter your guess ({MIN_NUMBER}-{MAX_NUMBER}): ")
 
         try:
             guess = int(raw_guess)
         except ValueError:
             print("Please enter a whole number")
             continue
-        if 1 <= guess <= 100:
+        if MIN_NUMBER <= guess <= MAX_NUMBER:
             return guess
 
-        print("Your guess must be between 1 and 100.")
+        print(f"Your guess must be between {MIN_NUMBER} and {MAX_NUMBER}.")
+
+
+def display_game_time(start_time: float) -> None:
+    elapsed_time = time.perf_counter() - start_time
+    print(f"Game time: {elapsed_time:.2f} sec.")
+
+
+def play_round(max_attempts: int):
+    start_time = time.perf_counter()
+    secret_number = generate_secret_number()
+
+    for attempts_used in range(1, max_attempts + 1):
+        guess = get_valid_guess()
+
+        if guess > secret_number:
+            print(f"Incorrect! The number is less than {guess}")
+
+        elif guess < secret_number:
+            print(f"Incorrect! The number is greater than {guess}")
+
+        else:
+            print(
+                f"\nCongratulations! You guessed the correct number in {attempts_used} attempts."
+            )
+            display_game_time(start_time)
+    print(f"\nGame over! The number was {secret_number}.")
+    display_game_time(start_time)
 
 
 def main():
     print(
-        dedent("""
-            +------------------------------------------+
-            | Welcome to the Number Guessing Game!     |
-            | I'm thinking of a number from 1 to 100.  |
-            | You have some chances to guess correctly.|
-            +------------------------------------------+
+        dedent(f"""
+            Welcome to the Number Guessing Game!
+            I'm thinking of a number from {MIN_NUMBER} to {MAX_NUMBER}.
+            You have some chances to guess correctly.
             """)
     )
 
@@ -78,41 +105,14 @@ def main():
             3. Hard (3 chances)""")
     )
 
-    attempts_used = 0
     max_attempts = choose_difficulty()
-    secret_number = generate_secret_number()
 
     while True:
-        if attempts_used >= max_attempts:
-            play_again = ask_to_play_again()
-            if play_again:
-                attempts_used = 0
-                secret_number = generate_secret_number()
-                continue
-            else:
-                print(
-                    "\nYou have decided to end the game. Thanks for playing and good luck!"
-                )
-                break
-        else:
-            guess = get_valid_guess()
-            attempts_used += 1
-            if guess > secret_number:
-                print(f"Incorrect! The number is less than {guess}")
-            elif guess < secret_number:
-                print(f"Incorrect! The number is greater than {guess}")
-            else:
-                print(
-                    f"\nCongratulations! You guessed the correct number in {attempts_used} attempts."
-                )
-                play_again = ask_to_play_again()
-                if play_again:
-                    attempts_used = 0
-                    secret_number = generate_secret_number()
-                    continue
-                else:
-                    print("\nThanks for playing and good luck!")
-                    break
+        play_round(max_attempts)
+
+        if not ask_to_play_again():
+            print("\nThanks for playing and good luck!")
+            break
 
 
 if __name__ == "__main__":
